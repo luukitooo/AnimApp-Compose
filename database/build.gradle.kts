@@ -2,6 +2,7 @@
 plugins {
     id("java-library")
     alias(libs.plugins.org.jetbrains.kotlin.jvm)
+    id("com.squareup.sqldelight")
     id("kotlin-kapt")
 }
 
@@ -11,25 +12,17 @@ java {
 }
 
 dependencies {
-    // Anime
-    implementation(project(":anime"))
-
-    // Manga
-    implementation(project(":manga"))
-
-    // Characters
-    implementation(project(":characters"))
-
-    // Core
-    implementation(project(":core"))
-
-    // Database
-    implementation(project(":database"))
+    // SQLDelight
+    implementation("com.squareup.sqldelight:runtime:1.5.5")
+    implementation("com.squareup.sqldelight:coroutines-extensions-jvm:1.5.5")
 
     // Dagger-Hilt
     implementation(libs.hilt.core)
     kapt(libs.hilt.compiler)
+}
 
-    // Coroutines
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+sqldelight {
+    database("AnimAppDatabase") {
+        packageName = "com.luukitoo.database"
+    }
 }

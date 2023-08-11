@@ -12,6 +12,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.luukitoo.animapp.presentation.screen.anime_details.AnimeDetailsScreen
 import com.luukitoo.animapp.presentation.screen.anime_details.viewmodel.AnimeDetailsViewModel
+import com.luukitoo.animapp.presentation.screen.favorites.anime.FavoriteAnimeListScreen
+import com.luukitoo.animapp.presentation.screen.favorites.anime.viewmodel.FavoriteAnimeListViewModel
 import com.luukitoo.animapp.presentation.screen.home.HomeScreen
 import com.luukitoo.animapp.presentation.screen.home.viewmodel.HomeViewModel
 import com.luukitoo.animapp.presentation.screen.manga_details.MangaDetailsScreen
@@ -89,6 +91,16 @@ fun MainNavHost() {
             val viewModel = hiltViewModel<MangaDetailsViewModel>()
             val state by viewModel.viewState.collectAsStateWithLifecycle()
             MangaDetailsScreen(
+                viewState = state,
+                onEvent = viewModel::onEvent,
+                navController = navHostController
+            )
+        }
+
+        composable(NavDestination.Favorites.route) {
+            val viewModel = hiltViewModel<FavoriteAnimeListViewModel>()
+            val state by viewModel.viewState.collectAsStateWithLifecycle()
+            FavoriteAnimeListScreen(
                 viewState = state,
                 onEvent = viewModel::onEvent,
                 navController = navHostController

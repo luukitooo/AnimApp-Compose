@@ -19,4 +19,6 @@ sealed class NavDestination(val route: String) {
     ) : NavDestination(
         route = "manga_details/${mangaId.process()}"
     )
+
+    object Favorites : NavDestination(route = "favorites")
 }

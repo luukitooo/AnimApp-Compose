@@ -123,7 +123,11 @@ fun HomeScreen(
                     }
                 },
                 floatingActionButton = {
-                    FloatingActionButton(onClick = { }) {
+                    FloatingActionButton(
+                        onClick = {
+                            navController.navigate(NavDestination.Favorites.route)
+                        }
+                    ) {
                         Icon(
                             imageVector = Icons.Outlined.Favorite,
                             contentDescription = null,

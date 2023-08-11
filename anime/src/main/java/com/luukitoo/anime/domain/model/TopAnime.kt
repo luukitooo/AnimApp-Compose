@@ -64,5 +64,12 @@ data class TopAnime(
             titleJapanese.notNull() -> titleJapanese!!
             else -> ""
         }
+
+        fun toFavoriteAnime() = FavoriteAnime(
+            id = id,
+            title = title.toString(),
+            studio = studios?.firstOrNull().toString(),
+            imageUrl = images?.jpg?.imageUrl ?: ""
+        )
     }
 }

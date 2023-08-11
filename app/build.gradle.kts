@@ -90,6 +90,9 @@ dependencies {
     // Core
     implementation(project(":core"))
 
+    // Database
+    implementation(project(":database"))
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -110,6 +113,9 @@ dependencies {
 
     // Youtube Player
     implementation(libs.core)
+
+    // SQLDelight Android Driver
+    implementation("com.squareup.sqldelight:android-driver:1.5.5")
 }
 
 kapt {

@@ -1,8 +1,10 @@
 package com.luukitoo.anime.domain.repository
 
 import com.luukitoo.anime.domain.model.AnimeDetails
+import com.luukitoo.anime.domain.model.FavoriteAnime
 import com.luukitoo.anime.domain.model.TopAnime
 import com.luukitoo.core.util.ResultStatus
+import kotlinx.coroutines.flow.Flow
 
 interface AnimeRepository {
 
@@ -19,4 +21,12 @@ interface AnimeRepository {
         page: Int?,
         query: String?
     ): ResultStatus<TopAnime>
+
+    fun getFavoriteAnimeFlow(): Flow<List<FavoriteAnime>>
+
+    fun getFavoriteAnimeList(): List<FavoriteAnime>
+
+    suspend fun saveAnimeToFavorites(anime: FavoriteAnime)
+
+    suspend fun removeAnimeFromFavorites(animeId: Long)
 }

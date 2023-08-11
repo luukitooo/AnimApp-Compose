@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS animeEntity(
+    id INTEGER NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    studio TEXT NOT NULL,
+    imageUrl TEXT NOT NULL
+);
+
+getFavoriteAnimeList:
+SELECT *
+FROM animeEntity;
+
+saveAnimeToFavorites:
+INSERT OR REPLACE
+INTO animeEntity
+VALUES(?, ?, ?, ?);
+
+removeAnimeFromFavorites:
+DELETE FROM animeEntity
+WHERE id = :id;
