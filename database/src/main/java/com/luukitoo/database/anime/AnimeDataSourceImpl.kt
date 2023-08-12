@@ -1,27 +1,25 @@
-package com.luukitoo.database
+package com.luukitoo.database.anime
 
 import com.squareup.sqldelight.runtime.coroutines.asFlow
 import com.squareup.sqldelight.runtime.coroutines.mapToList
 import entity.AnimeEntity
+import entity.AnimeEntityQueries
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AnimeDataSourceImpl @Inject constructor(
-    private val database: AnimAppDatabase
+    private val queries: AnimeEntityQueries
 ) : AnimeDataSource {
 
     override fun getFavoriteAnimeFlow(): Flow<List<AnimeEntity>> {
-        return database.animeEntityQueries
-            .getFavoriteAnimeList()
+        return queries.getFavoriteAnimeList()
             .asFlow()
             .mapToList(context = Dispatchers.IO)
     }
 
-    override fun getFavoriteAnimeList(): List<AnimeEntity> {
-        return database.animeEntityQueries
-            .getFavoriteAnimeList()
-            .executeAsList()
+    override suspend fun getFavoriteAnimeList(): List<AnimeEntity> {
+        return queries.getFavoriteAnimeList().executeAsList()
     }
 
     override suspend fun saveAnimeToFavorites(
@@ -30,7 +28,7 @@ class AnimeDataSourceImpl @Inject constructor(
         studio: String,
         imageUrl: String
     ) {
-        database.animeEntityQueries.saveAnimeToFavorites(
+        queries.saveAnimeToFavorites(
             id = id,
             title = title,
             studio = studio,
@@ -39,6 +37,6 @@ class AnimeDataSourceImpl @Inject constructor(
     }
 
     override suspend fun removeAnimeFromFavorites(animeId: Long) {
-        database.animeEntityQueries.removeAnimeFromFavorites(animeId)
+        queries.removeAnimeFromFavorites(animeId)
     }
 }

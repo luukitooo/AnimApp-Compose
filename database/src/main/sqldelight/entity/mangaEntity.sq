@@ -1,0 +1,19 @@
+CREATE TABLE IF NOT EXISTS mangaEntity(
+    id INTEGER NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    author TEXT NOT NULL,
+    imageUrl TEXT NOT NULL
+);
+
+getFavoriteMangaList:
+SELECT *
+FROM mangaEntity;
+
+saveMangaToFavorites:
+INSERT OR REPLACE
+INTO mangaEntity
+VALUES(?, ?, ?, ?);
+
+removeMangaFromFavorites:
+DELETE FROM mangaEntity
+WHERE id = :id;

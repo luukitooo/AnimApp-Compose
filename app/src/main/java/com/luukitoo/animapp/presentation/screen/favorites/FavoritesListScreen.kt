@@ -1,5 +1,7 @@
-package com.luukitoo.animapp.presentation.screen.favorites.anime
+package com.luukitoo.animapp.presentation.screen.favorites
 
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +17,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,16 +27,19 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.luukitoo.animapp.presentation.navigation.NavDestination
 import com.luukitoo.animapp.presentation.navigation.RouteArg
-import com.luukitoo.animapp.presentation.screen.favorites.anime.viewmodel.FavoriteAnimeListEvent
-import com.luukitoo.animapp.presentation.screen.favorites.anime.viewmodel.FavoriteAnimeListViewState
+import com.luukitoo.animapp.presentation.screen.favorites.component.FavoriteCategoriesRow
 import com.luukitoo.animapp.presentation.screen.favorites.component.FavoriteListItem
+import com.luukitoo.animapp.presentation.screen.favorites.helper.FavoriteType
+import com.luukitoo.animapp.presentation.screen.favorites.viewmodel.FavoriteCategory
+import com.luukitoo.animapp.presentation.screen.favorites.viewmodel.FavoritesListEvent
+import com.luukitoo.animapp.presentation.screen.favorites.viewmodel.FavoritesListViewState
 import com.luukitoo.animapp.presentation.ui.theme.AnimAppTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun FavoriteAnimeListScreen(
-    viewState: FavoriteAnimeListViewState,
-    onEvent: (FavoriteAnimeListEvent) -> Unit,
+    viewState: FavoritesListViewState,
+    onEvent: (FavoritesListEvent) -> Unit,
     navController: NavController
 ) {
 
@@ -65,18 +69,36 @@ fun FavoriteAnimeListScreen(
             contentPadding = PaddingValues(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            items(viewState.favoriteAnimeList) { favoriteAnime ->
+            item {
+                FavoriteCategoriesRow(
+                    modifier = Modifier.fillMaxWidth(),
+                    categories = FavoriteCategory.values(),
+                    selectedCategory = viewState.selectedCategory,
+                    onClick = { category ->
+                        onEvent(FavoritesListEvent.SetCategory(category))
+                    }
+                )
+            }
+            items(
+                key = { it.id ?: -1 },
+                items = viewState.favoritesList,
+            ) { favoriteItem ->
                 FavoriteListItem(
                     modifier = Modifier.fillMaxWidth(),
-                    title = favoriteAnime.title,
-                    by = favoriteAnime.studio,
-                    imageUrl = favoriteAnime.imageUrl,
+                    favoriteItemModel = favoriteItem,
                     onClick = {
-                        navController.navigate(
-                            NavDestination.AnimeDetails(
-                                animeId = RouteArg("animeId", favoriteAnime.id)
-                            ).route
-                        )
+                        when (favoriteItem.type) {
+                            FavoriteType.ANIME -> navController.navigate(
+                                NavDestination.AnimeDetails(
+                                    animeId = RouteArg("animeId", favoriteItem.id)
+                                ).route
+                            )
+                            FavoriteType.MANGA -> navController.navigate(
+                                NavDestination.MangaDetails(
+                                    mangaId = RouteArg("mangaId", favoriteItem.id)
+                                ).route
+                            )
+                        }
                     }
                 )
             }
@@ -89,7 +111,7 @@ fun FavoriteAnimeListScreen(
 fun FavoriteAnimeListScreenPreview() {
     AnimAppTheme {
         FavoriteAnimeListScreen(
-            viewState = FavoriteAnimeListViewState(),
+            viewState = FavoritesListViewState(),
             onEvent = { },
             navController = rememberNavController()
         )

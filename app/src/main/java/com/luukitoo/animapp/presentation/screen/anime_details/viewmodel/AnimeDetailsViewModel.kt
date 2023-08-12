@@ -1,6 +1,5 @@
 package com.luukitoo.animapp.presentation.screen.anime_details.viewmodel
 
-import android.util.Log.d
 import androidx.lifecycle.SavedStateHandle
 import com.luukitoo.anime.domain.model.FavoriteAnime
 import com.luukitoo.anime.domain.model.TopAnime
@@ -85,6 +84,8 @@ class AnimeDetailsViewModel @Inject constructor(
                     copy(
                         characters = characterInfo.data?.map {
                             it.character ?: CharacterInfo.CharacterData.Character()
+                        }?.sortedBy {
+                            it.id
                         } ?: emptyList(),
                     )
                 }

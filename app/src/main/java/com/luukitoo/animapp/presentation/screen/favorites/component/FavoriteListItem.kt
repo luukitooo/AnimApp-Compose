@@ -21,15 +21,15 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import com.luukitoo.animapp.presentation.screen.favorites.helper.FavoriteItemModel
+import com.luukitoo.animapp.presentation.screen.favorites.helper.FavoriteType
 import com.luukitoo.animapp.presentation.ui.theme.AnimAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun FavoriteListItem(
     modifier: Modifier = Modifier,
-    title: String,
-    by: String,
-    imageUrl: String,
+    favoriteItemModel: FavoriteItemModel,
     onClick: () -> Unit
 ) {
 
@@ -42,7 +42,7 @@ fun FavoriteListItem(
         ) {
             AsyncImage(
                 modifier = Modifier.height(100.dp),
-                model = imageUrl,
+                model = favoriteItemModel.imageUrl,
                 contentDescription = null
             )
             Column(
@@ -53,13 +53,13 @@ fun FavoriteListItem(
                         iterations = Int.MAX_VALUE,
                         delayMillis = 3000
                     ),
-                    text = title,
+                    text = favoriteItemModel.title,
                     maxLines = 1,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Medium
                 )
                 Text(
-                    text = "by $by",
+                    text = "by ${favoriteItemModel.by}",
                     maxLines = 1
                 )
             }
@@ -72,9 +72,13 @@ fun FavoriteListItem(
 fun FavoriteListItemPreview() {
     AnimAppTheme {
         FavoriteListItem(
-            title = "Attack on Titan",
-            by = "MAPPA",
-            imageUrl = "",
+            favoriteItemModel = FavoriteItemModel(
+                title = "",
+                by = "",
+                imageUrl = "",
+                id = 0,
+                type = FavoriteType.MANGA
+            ),
             onClick = { }
         )
     }

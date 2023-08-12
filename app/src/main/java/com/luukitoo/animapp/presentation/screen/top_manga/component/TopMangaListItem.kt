@@ -54,7 +54,7 @@ fun TopMangaListItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .basicMarquee(
-                    iterations = 50,
+                    iterations = Int.MAX_VALUE,
                     delayMillis = 1000,
                     initialDelayMillis = 2000
                 ),

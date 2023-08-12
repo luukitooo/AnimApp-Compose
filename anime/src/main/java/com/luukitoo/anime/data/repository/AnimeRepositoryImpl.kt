@@ -8,8 +8,7 @@ import com.luukitoo.anime.domain.model.TopAnime
 import com.luukitoo.anime.domain.repository.AnimeRepository
 import com.luukitoo.core.util.NetworkCaller
 import com.luukitoo.core.util.ResultStatus
-import com.luukitoo.database.AnimeDataSource
-import entity.AnimeEntityQueries
+import com.luukitoo.database.anime.AnimeDataSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -57,7 +56,7 @@ class AnimeRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun getFavoriteAnimeList(): List<FavoriteAnime> {
+    override suspend fun getFavoriteAnimeList(): List<FavoriteAnime> {
         return animeDataSource.getFavoriteAnimeList().map {
             FavoriteAnime.fromEntity(it)
         }

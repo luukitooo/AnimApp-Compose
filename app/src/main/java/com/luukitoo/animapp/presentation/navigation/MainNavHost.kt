@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavArgument
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -12,8 +11,8 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.luukitoo.animapp.presentation.screen.anime_details.AnimeDetailsScreen
 import com.luukitoo.animapp.presentation.screen.anime_details.viewmodel.AnimeDetailsViewModel
-import com.luukitoo.animapp.presentation.screen.favorites.anime.FavoriteAnimeListScreen
-import com.luukitoo.animapp.presentation.screen.favorites.anime.viewmodel.FavoriteAnimeListViewModel
+import com.luukitoo.animapp.presentation.screen.favorites.FavoriteAnimeListScreen
+import com.luukitoo.animapp.presentation.screen.favorites.viewmodel.FavoritesListViewModel
 import com.luukitoo.animapp.presentation.screen.home.HomeScreen
 import com.luukitoo.animapp.presentation.screen.home.viewmodel.HomeViewModel
 import com.luukitoo.animapp.presentation.screen.manga_details.MangaDetailsScreen
@@ -98,7 +97,7 @@ fun MainNavHost() {
         }
 
         composable(NavDestination.Favorites.route) {
-            val viewModel = hiltViewModel<FavoriteAnimeListViewModel>()
+            val viewModel = hiltViewModel<FavoritesListViewModel>()
             val state by viewModel.viewState.collectAsStateWithLifecycle()
             FavoriteAnimeListScreen(
                 viewState = state,

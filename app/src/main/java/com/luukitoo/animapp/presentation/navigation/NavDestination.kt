@@ -9,7 +9,7 @@ sealed class NavDestination(val route: String) {
     data class AnimeDetails(
         val animeId: RouteArg = RouteArg("animeId")
     ) : NavDestination(
-        route = "anime_details/${animeId.process()}"
+        route = "anime_details/$animeId"
     )
 
     object TopMangaList : NavDestination(route = "top_manga_list")
@@ -17,7 +17,7 @@ sealed class NavDestination(val route: String) {
     data class MangaDetails(
         val mangaId: RouteArg = RouteArg("mangaId")
     ) : NavDestination(
-        route = "manga_details/${mangaId.process()}"
+        route = "manga_details/$mangaId"
     )
 
     object Favorites : NavDestination(route = "favorites")

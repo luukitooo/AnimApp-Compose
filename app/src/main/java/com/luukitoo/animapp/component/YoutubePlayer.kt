@@ -1,4 +1,4 @@
-package com.luukitoo.animapp.presentation.screen.anime_details.component
+package com.luukitoo.animapp.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

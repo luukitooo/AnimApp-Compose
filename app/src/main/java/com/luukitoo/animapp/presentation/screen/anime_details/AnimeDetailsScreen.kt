@@ -6,6 +6,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -44,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -52,17 +55,21 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.luukitoo.animapp.R
 import com.luukitoo.animapp.component.ExpandableText
 import com.luukitoo.animapp.component.FullscreenLoading
 import com.luukitoo.animapp.component.GenreBubble
-import com.luukitoo.animapp.presentation.screen.anime_details.component.YouTubePlayer
+import com.luukitoo.animapp.extension.openUrl
+import com.luukitoo.animapp.extension.shareText
+import com.luukitoo.animapp.component.YouTubePlayer
 import com.luukitoo.animapp.presentation.screen.anime_details.viewmodel.AnimeDetailsEvent
 import com.luukitoo.animapp.presentation.screen.anime_details.viewmodel.AnimeDetailsViewState
 import com.luukitoo.animapp.presentation.ui.theme.AnimAppTheme
 import com.luukitoo.anime.domain.model.TopAnime
 
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
+    ExperimentalMaterial3Api::class,
+    ExperimentalLayoutApi::class,
     ExperimentalFoundationApi::class
 )
 @Composable
@@ -72,6 +79,7 @@ fun AnimeDetailsScreen(
     navController: NavController
 ) {
 
+    val context = LocalContext.current
     val mainScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     if (viewState.isLoading) {
@@ -100,7 +108,7 @@ fun AnimeDetailsScreen(
                     ) {
                         Text(
                             modifier = Modifier.basicMarquee(
-                                iterations = 50,
+                                iterations = Int.MAX_VALUE,
                                 delayMillis = 3000,
                             ),
                             maxLines = 1,
@@ -109,6 +117,26 @@ fun AnimeDetailsScreen(
                     }
                 },
                 actions = {
+                    IconButton(
+                        onClick = {
+                            context.shareText(viewState.anime.url)
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_share),
+                            contentDescription = null
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            context.openUrl(viewState.anime.url)
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_globe),
+                            contentDescription = null
+                        )
+                    }
                     FilledTonalIconButton(
                         onClick = {
                             if (viewState.isFavorite) {
@@ -227,7 +255,8 @@ fun AnimeDetailsScreen(
                             AsyncImage(
                                 modifier = Modifier
                                     .size(62.dp)
-                                    .clip(CircleShape),
+                                    .clip(CircleShape)
+                                    .clickable { context.openUrl(character.url) },
                                 model = character.images?.jpg?.imageUrl,
                                 contentDescription = null,
                                 contentScale = ContentScale.Crop

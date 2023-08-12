@@ -2,8 +2,10 @@ package com.luukitoo.animapp.di
 
 import android.app.Application
 import com.luukitoo.database.AnimAppDatabase
-import com.luukitoo.database.AnimeDataSource
-import com.luukitoo.database.AnimeDataSourceImpl
+import com.luukitoo.database.anime.AnimeDataSource
+import com.luukitoo.database.anime.AnimeDataSourceImpl
+import com.luukitoo.database.manga.MangaDataSource
+import com.luukitoo.database.manga.MangaDataSourceImpl
 import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.squareup.sqldelight.db.SqlDriver
 import dagger.Binds
@@ -11,6 +13,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import entity.AnimeEntityQueries
+import entity.MangaEntityQueries
 import javax.inject.Singleton
 
 @Module
@@ -32,6 +36,22 @@ object LocalModule {
     fun provideDatabase(driver: SqlDriver): AnimAppDatabase {
         return AnimAppDatabase.invoke(driver)
     }
+
+    @Provides
+    @Singleton
+    fun provideAnimeQueries(
+        database: AnimAppDatabase
+    ): AnimeEntityQueries {
+        return database.animeEntityQueries
+    }
+
+    @Provides
+    @Singleton
+    fun provideMangaQueries(
+        database: AnimAppDatabase
+    ): MangaEntityQueries {
+        return database.mangaEntityQueries
+    }
 }
 
 @Module
@@ -42,5 +62,11 @@ interface DataSourceModule {
     @Singleton
     fun bindAnimeDataSourceImpl(
         animeDataSourceImpl: AnimeDataSourceImpl
-    ) : AnimeDataSource
+    ): AnimeDataSource
+
+    @Binds
+    @Singleton
+    fun bindMangaDataSourceImpl(
+        mangaDataSourceImpl: MangaDataSourceImpl
+    ): MangaDataSource
 }

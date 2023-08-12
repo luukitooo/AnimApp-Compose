@@ -24,7 +24,7 @@ interface AnimeRepository {
 
     fun getFavoriteAnimeFlow(): Flow<List<FavoriteAnime>>
 
-    fun getFavoriteAnimeList(): List<FavoriteAnime>
+    suspend fun getFavoriteAnimeList(): List<FavoriteAnime>
 
     suspend fun saveAnimeToFavorites(anime: FavoriteAnime)
 

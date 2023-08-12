@@ -1,5 +1,8 @@
 package com.luukitoo.animapp.component
 
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -41,6 +44,12 @@ fun ExpandableText(
         horizontalAlignment = Alignment.End
     ) {
         Text(
+            modifier = Modifier.animateContentSize(
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioNoBouncy,
+                    stiffness = Spring.StiffnessVeryLow
+                )
+            ),
             text = text,
             maxLines = if (isExpanded) Int.MAX_VALUE else minLines,
             overflow = TextOverflow.Ellipsis,

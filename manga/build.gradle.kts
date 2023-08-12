@@ -18,7 +18,13 @@ dependencies {
     // Core
     implementation(project(":core"))
 
+    // Database
+    implementation(project(":database"))
+
     // Dagger-Hilt
     implementation(libs.hilt.core)
     kapt(libs.hilt.compiler)
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 }

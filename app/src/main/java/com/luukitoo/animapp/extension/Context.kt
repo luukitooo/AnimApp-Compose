@@ -5,12 +5,17 @@ import android.content.Intent
 import android.net.Uri
 
 fun Context.openUrl(url: String?) {
-    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    url?.let {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+    }
 }
 
 fun Context.shareText(text: String?) {
-    val intent = Intent(Intent.ACTION_SEND)
-    intent.type = "text/plain"
-    intent.putExtra(Intent.EXTRA_TEXT, text)
-    startActivity(Intent.createChooser(intent, "Share Text"))
+    text?.let {
+        Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_TEXT, text)
+            startActivity(Intent.createChooser(this, null))
+        }
+    }
 }

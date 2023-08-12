@@ -69,7 +69,6 @@ import com.luukitoo.animapp.presentation.screen.home.viewmodel.HomeEvent
 import com.luukitoo.animapp.presentation.screen.home.viewmodel.HomeViewState
 import com.luukitoo.animapp.presentation.ui.theme.AnimAppTheme
 import com.luukitoo.anime.domain.model.TopAnime
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -157,7 +156,14 @@ fun HomeScreen(
                     PrimaryImageBox(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1f),
+                            .aspectRatio(1f)
+                            .clickable {
+                                navController.navigate(
+                                    NavDestination.AnimeDetails(
+                                        animeId = RouteArg("animeId", viewState.topFiveAnime[index].id)
+                                    ).route
+                                )
+                            },
                         url = viewState.topFiveAnime[index].images?.jpg?.largeImageUrl ?: "",
                         title = viewState.topFiveAnime[index].title ?: "",
                     )
@@ -193,7 +199,7 @@ fun HomeScreen(
                         modifier = Modifier,
                         onClick = {
                             coroutineScope.launch {
-                                topAnimeScrollState.animateScrollToItem(viewState.animeList.lastIndex)
+                                topAnimeScrollState.animateScrollToItem(viewState.animeList.lastIndex + 1,)
                             }
                         }
                     ) {
@@ -261,7 +267,7 @@ fun HomeScreen(
                     IconButton(
                         onClick = {
                             coroutineScope.launch {
-                                topMangaScrollState.animateScrollToItem(viewState.mangaList.lastIndex)
+                                topMangaScrollState.animateScrollToItem(viewState.mangaList.lastIndex + 1)
                             }
                         }
                     ) {

@@ -4,13 +4,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +17,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -43,6 +39,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -51,16 +49,19 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.luukitoo.animapp.R
 import com.luukitoo.animapp.component.ExpandableText
 import com.luukitoo.animapp.component.FullscreenLoading
 import com.luukitoo.animapp.component.GenreBubble
-import com.luukitoo.animapp.presentation.screen.anime_details.component.YouTubePlayer
-import com.luukitoo.animapp.presentation.screen.anime_details.viewmodel.AnimeDetailsEvent
+import com.luukitoo.animapp.extension.openUrl
+import com.luukitoo.animapp.extension.shareText
 import com.luukitoo.animapp.presentation.screen.manga_details.viewmodel.MangaDetailsEvent
 import com.luukitoo.animapp.presentation.screen.manga_details.viewmodel.MangaDetailsViewState
 import com.luukitoo.animapp.presentation.ui.theme.AnimAppTheme
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+@OptIn(
+    ExperimentalMaterial3Api::class,
+    ExperimentalFoundationApi::class,
     ExperimentalLayoutApi::class
 )
 @Composable
@@ -70,6 +71,7 @@ fun MangaDetailsScreen(
     navController: NavController
 ) {
 
+    val context = LocalContext.current
     val mainScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
     if (viewState.isLoading) {
@@ -98,7 +100,7 @@ fun MangaDetailsScreen(
                     ) {
                         Text(
                             modifier = Modifier.basicMarquee(
-                                iterations = 50,
+                                iterations = Int.MAX_VALUE,
                                 delayMillis = 3000,
                             ),
                             maxLines = 1,
@@ -107,6 +109,26 @@ fun MangaDetailsScreen(
                     }
                 },
                 actions = {
+                    IconButton(
+                        onClick = {
+                            context.shareText(viewState.manga.url)
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_share),
+                            contentDescription = null
+                        )
+                    }
+                    IconButton(
+                        onClick = {
+                            context.openUrl(viewState.manga.url)
+                        }
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_globe),
+                            contentDescription = null
+                        )
+                    }
                     FilledTonalIconButton(
                         onClick = {
                             if (viewState.isFavorite) {

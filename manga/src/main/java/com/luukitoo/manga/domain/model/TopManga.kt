@@ -57,5 +57,12 @@ data class TopManga(
             titleJapanese.notNull() -> titleJapanese!!
             else -> ""
         }
+
+        fun toFavoriteManga() = FavoriteManga(
+            id = id,
+            title = getMangaTitle(),
+            author = authors?.firstOrNull()?.name.toString(),
+            imageUrl = images?.jpg?.imageUrl.toString()
+        )
     }
 }

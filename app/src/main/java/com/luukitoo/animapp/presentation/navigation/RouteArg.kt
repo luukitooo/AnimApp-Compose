@@ -6,5 +6,8 @@ data class RouteArg(
     val key: String,
     val value: Any? = null,
 ) {
-    fun process() = if (value.isNull()) "{$key}" else value
+
+    override fun toString(): String {
+        return if (value.isNull()) "{$key}" else value.toString()
+    }
 }
